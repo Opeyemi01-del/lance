@@ -1724,7 +1724,7 @@ mod test {
     }
 
     #[test]
-    #[should_panic(expected = "job already exists")]
+    #[should_panic(expected = "Error(Contract, #4)")]
     fn test_double_create_job_panics() {
         let env = Env::default();
         env.mock_all_auths();
@@ -2068,7 +2068,7 @@ mod test {
     }
 
     #[test]
-    #[should_panic(expected = "invalid milestone index")]
+    #[should_panic(expected = "Error(Contract, #4)")]
     fn test_release_funds_invalid_index_panics() {
         let env = Env::default();
         env.mock_all_auths();
@@ -2093,7 +2093,7 @@ mod test {
     }
 
     #[test]
-    #[should_panic(expected = "Error(WasmVm, InvalidAction)")]
+    #[should_panic(expected = "Error(Contract, #6)")]
     fn test_release_funds_twice_panics() {
         let env = Env::default();
         env.mock_all_auths();
@@ -2119,7 +2119,7 @@ mod test {
     }
 
     #[test]
-    #[should_panic(expected = "only client can release")]
+    #[should_panic(expected = "Error(Contract, #3)")]
     fn test_unauthorized_release_funds_by_freelancer_panics() {
         let env = Env::default();
         env.mock_all_auths();
@@ -2232,7 +2232,7 @@ mod test {
     }
 
     #[test]
-    #[should_panic(expected = "unauthorized: only client or freelancer can raise a dispute")]
+    #[should_panic(expected = "Error(Contract, #3)")]
     fn test_raise_dispute_by_third_party_panics() {
         let env = Env::default();
         env.mock_all_auths();
@@ -2258,7 +2258,7 @@ mod test {
     }
 
     #[test]
-    #[should_panic(expected = "dispute cannot be raised: job is not in active state")]
+    #[should_panic(expected = "Error(Contract, #6)")]
     fn test_raise_dispute_on_completed_job_panics() {
         let env = Env::default();
         env.mock_all_auths();
@@ -2444,7 +2444,7 @@ mod test {
     }
 
     #[test]
-    #[should_panic(expected = "job not disputed")]
+    #[should_panic(expected = "Error(Contract, #6)")]
     fn test_resolve_dispute_not_disputed_panics() {
         let env = Env::default();
         env.mock_all_auths();
@@ -2532,7 +2532,7 @@ mod test {
     }
 
     #[test]
-    #[should_panic(expected = "job not found")]
+    #[should_panic(expected = "Error(Contract, #5)")]
     fn test_get_job_not_found_panics() {
         let env = Env::default();
         env.mock_all_auths();
@@ -2797,7 +2797,7 @@ mod test {
     }
 
     #[test]
-    #[should_panic(expected = "Error(Contract, #17)")]
+    #[should_panic(expected = "Error(Contract, #20)")]
     fn test_resolve_after_deadline_fails() {
         let env = Env::default();
         env.mock_all_auths();
