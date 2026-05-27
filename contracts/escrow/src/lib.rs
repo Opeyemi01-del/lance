@@ -135,8 +135,7 @@ pub enum EscrowError {
     InsufficientSignatures = 14,
     AlreadySigned = 15,
     ArithmeticOverflow = 16,
-    TokenDecimalsMismatch = 17,
-    DisputeResolutionExpired = 18,
+    DisputeResolutionExpired = 17,
 }
 
 #[contracttype]
@@ -516,16 +515,14 @@ impl EscrowContract {
         }
 
         // Query token decimals dynamically; custom assets vary (USDC=6, XLM=7, etc.)
+        // Query token decimals dynamically; stored so off-chain consumers can
+        // correctly display amounts (USDC=6, XLM=7, etc.).
+        // Amounts are already in the token's smallest unit so no rounding check needed.
         let decimals = token::Client::new(&env, &job.token).decimals();
         job.token_decimals = decimals;
-        let base_unit = 10i128.pow(decimals);
 
         let mut total_milestones_amount = 0i128;
         for m in job.milestones.iter() {
-            // Validate whole-unit amounts to prevent micro-precision discrepancies
-            if m.amount % base_unit != 0 {
-                return Err(EscrowError::TokenDecimalsMismatch);
-            }
             total_milestones_amount = total_milestones_amount
                 .checked_add(m.amount)
                 .ok_or(EscrowError::ArithmeticOverflow)?;
@@ -2524,7 +2521,7 @@ mod test {
     }
 
     #[test]
-    #[should_panic(expected = "Error(Contract, #18)")]
+    #[should_panic(expected = "Error(Contract, #17)")]
     fn test_resolve_after_deadline_fails() {
         let env = Env::default();
         env.mock_all_auths();
